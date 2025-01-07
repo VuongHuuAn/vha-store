@@ -23,8 +23,7 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "https://vha-store.vercel.app/auth/google/callback",
-      //"/auth/google/callback"||
+      callbackURL: "/auth/google/callback"||"https://vha-store.vercel.app/auth/google/callback",
       // Thêm các options sau
       scope: ['profile', 'email'],
       
