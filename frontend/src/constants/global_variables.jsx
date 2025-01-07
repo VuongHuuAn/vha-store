@@ -1,5 +1,6 @@
 
-export const URI= 'http://localhost:3000';
+// export const URI= 'http://localhost:3000';
+export const URI= 'https://vha-store.vercel.app';
 export const carouselImages = [
     'https://vkovic.github.io/uikit-computer-store-template/images/promo/macbook-new.jpg',
     'https://vkovic.github.io/uikit-computer-store-template/images/promo/iphone.jpg',
