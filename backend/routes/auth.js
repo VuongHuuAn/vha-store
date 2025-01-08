@@ -155,9 +155,9 @@ authRouter.get('/auth/google/callback',
         token,
         ...req.user._doc
       };
-      res.redirect(`http://localhost:3001/login-success?data=${encodeURIComponent(JSON.stringify(userData))}`);
+      res.redirect(`https://vha-store-huuan.vercel.app/login-success?data=${encodeURIComponent(JSON.stringify(userData))}`);
     } catch (error) {
-      res.redirect('http://localhost:3001/login');
+      res.redirect('https://vha-store-huuan.vercel.app/login');
     }
   }
 );
