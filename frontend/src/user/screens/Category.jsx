@@ -144,9 +144,21 @@ const Category = () => {
   />
 </div>
 <div className="p-4">
-  <h3 className="font-semibold text-gray-800 mb-3 truncate">
+  <h3 className="font-semibold text-gray-800 mb-2 truncate">
     {product.name}
   </h3>
+  {product.sellerId?.shopName && (
+    <div className="flex items-center space-x-2 mb-3">
+      <img 
+        src={product.sellerId.shopAvatar || '/default-shop.png'} 
+        alt={product.sellerId.shopName}
+        className="w-4 h-4 rounded-full object-cover"
+      />
+      <span className="text-xs text-gray-500">
+        {product.sellerId.shopName}
+      </span>
+    </div>
+  )}
   <div className="flex justify-between items-center">
     <PriceDisplay 
       price={product.price}

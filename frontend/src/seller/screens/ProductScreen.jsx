@@ -69,19 +69,27 @@ const ProductScreen = () => {
   };
 
   const handleSetDiscount = async (e) => {
-    e.preventDefault();
-    try {
-      setLoading(true);
-      await SellerService.setDiscount(discountProduct._id, discountForm);
-      setDiscountDialog(false);
-      resetDiscountForm();
-      fetchProducts();
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+  e.preventDefault();
+  try {
+    setLoading(true);
+    
+    // Chuyển đổi dữ liệu từ form thành đúng định dạng
+    const discountData = {
+      percentage: Number(discountForm.percentage),
+      startDate: new Date(discountForm.startDate).toISOString(),
+      endDate: new Date(discountForm.endDate).toISOString()
+    };
+
+    await SellerService.setDiscount(discountProduct._id, discountData);
+    setDiscountDialog(false);
+    resetDiscountForm();
+    fetchProducts();
+  } catch (err) {
+    setError(err.message);
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleDelete = async (productId) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
@@ -108,6 +116,24 @@ const ProductScreen = () => {
   const resetDiscountForm = () => {
     setDiscountProduct(null);
     setDiscountForm({ percentage: '', startDate: '', endDate: '' });
+  };
+
+  const isDiscountActive = (product) => {
+    if (!product.discount || !product.startDate || !product.endDate) {
+      return false;
+    }
+    const now = new Date();
+    const startDate = new Date(product.startDate);
+    const endDate = new Date(product.endDate);
+    return product.discount > 0 && now >= startDate && now <= endDate;
+  };
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString('vi-VN', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    });
   };
 
   return (
@@ -147,10 +173,39 @@ const ProductScreen = () => {
                   <div className="font-medium">{product.name}</div>
                   <div className="text-sm text-gray-500">{product.description}</div>
                 </td>
-                <td>${product.price}</td>
+                <td>
+                  <div className="flex flex-col">
+                    <span className={isDiscountActive(product) ? "text-gray-500 line-through" : ""}>
+                      ${product.price}
+                    </span>
+                    {isDiscountActive(product) && (
+                      <span className="text-red-600">
+                        ${(product.price * (1 - product.discount / 100)).toFixed(2)}
+                      </span>
+                    )}
+                  </div>
+                </td>
                 <td>{product.quantity}</td>
                 <td>{product.category}</td>
-                <td>{product.discount ? `${product.discount}%` : 'No discount'}</td>
+                <td>
+                  {isDiscountActive(product) ? (
+                    <div className="text-green-600">
+                      {product.discount}% off
+                      <div className="text-xs text-gray-500">
+                        Until {formatDate(product.endDate)}
+                      </div>
+                    </div>
+                  ) : product.discount > 0 ? (
+                    <div>
+                      <span className="text-gray-500">No active discount</span>
+                      <div className="text-xs text-red-400">
+                        Expired on {formatDate(product.endDate)}
+                      </div>
+                    </div>
+                  ) : (
+                    <span className="text-gray-500">No discount</span>
+                  )}
+                </td>
                 <td>
                   <div className="flex space-x-2">
                     <button onClick={() => handleEdit(product)} className="p-1 text-blue-500 hover:text-blue-700">

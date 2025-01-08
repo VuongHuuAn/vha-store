@@ -19,8 +19,8 @@ const DB = process.env.MONGODB_URL;
 // middleware
 app.use(
   cors({
-    origin:  "https://vha-store-huuan.vercel.app", 
-    // origin:  "http://localhost:3001", 
+    // origin:  "https://vha-store-huuan.vercel.app", 
+    origin:  "http://localhost:3001", 
     
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "x-auth-token", "Authorization"],

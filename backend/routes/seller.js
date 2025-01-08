@@ -431,23 +431,34 @@ sellerRouter.post("/seller/set-discount/:id", seller, async (req, res) => {
       return res.status(404).json({ error: "Product not found" });
     }
 
-    // Cập nhật thông tin discount
-    product.discount = percentage;
-    product.startDate = startDate;
-    product.endDate = endDate;
+    // Validate dates
+    const start = new Date(startDate);
+    const end = new Date(endDate);
 
-    // Tính lại finalPrice
-    if (percentage > 0) {
-      product.finalPrice = product.price * (1 - percentage / 100);
-    } else {
-      product.finalPrice = product.price;
+    if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+      return res.status(400).json({ error: "Invalid date format" });
     }
 
-    // Lưu sản phẩm
-    product = await product.save();
+    if (end <= start) {
+      return res.status(400).json({ error: "End date must be after start date" });
+    }
+
+    // Validate percentage
+    if (percentage < 0 || percentage > 100) {
+      return res.status(400).json({ error: "Invalid discount percentage" });
+    }
+
+    // Cập nhật thông tin discount
+    product.discount = percentage;
+    product.startDate = start;
+    product.endDate = end;
+
+    // Lưu sản phẩm (sẽ tự động cập nhật finalPrice thông qua middleware)
+    await product.save();
 
     res.json(product);
   } catch (e) {
+    console.error('Error setting discount:', e);
     res.status(500).json({ error: e.message });
   }
 });

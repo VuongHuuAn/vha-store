@@ -1,4 +1,5 @@
 import React from 'react';
+import { useProduct } from '../../context/ProductContext';
 
 const PriceDisplay = ({ 
   price, 
@@ -8,8 +9,13 @@ const PriceDisplay = ({
   showSaleTag = false,
   showEndDate = false,
   endDate,
-  showStars = false
+  showStars = false,
+  product
 }) => {
+  const { calculateFinalPrice } = useProduct();
+
+  const actualFinalPrice = product ? calculateFinalPrice(product) : finalPrice;
+
   const formatDate = (date) => {
     return new Date(date).toLocaleDateString();
   };
@@ -48,7 +54,7 @@ const PriceDisplay = ({
       {discount > 0 ? (
         <>
           <span className="text-xl font-bold text-red-600">
-            ${finalPrice?.toFixed(2)}
+            ${actualFinalPrice?.toFixed(2)}
           </span>
           <span className="text-base text-gray-500 line-through">
             ${price?.toFixed(2)}

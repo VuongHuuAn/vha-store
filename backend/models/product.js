@@ -69,32 +69,56 @@ const productSchema = new mongoose.Schema({
 });
 
 
-// Thêm middleware để tự động tính finalPrice
-productSchema.methods.calculateFinalPrice = function() {
+// Method để kiểm tra và cập nhật finalPrice
+productSchema.methods.updateFinalPrice = function() {
   const now = new Date();
-  if (this.discount > 0 && 
-      this.startDate && 
-      this.endDate && 
-      now >= this.startDate && 
-      now <= this.endDate) {
-    return this.price * (1 - this.discount / 100);
+  const currentTime = now.getTime();
+  const startTime = this.startDate ? new Date(this.startDate).getTime() : null;
+  const endTime = this.endDate ? new Date(this.endDate).getTime() : null;
+
+  if (this.discount > 0 && startTime && endTime) {
+    if (currentTime >= startTime && currentTime <= endTime) {
+      // Trong thời gian giảm giá
+      this.finalPrice = this.price * (1 - this.discount / 100);
+    } else if (currentTime > endTime) {
+      // Hết thời gian giảm giá
+      this.finalPrice = this.price;
+      this.discount = 0;
+      this.startDate = null;
+      this.endDate = null;
+    }
+  } else {
+    this.finalPrice = this.price;
   }
-  return this.price;
 };
 
 // Middleware pre-save
 productSchema.pre('save', function(next) {
-  if (this.discount > 0) {
-      this.finalPrice = this.price * (1 - this.discount / 100);
-  } else {
-      this.finalPrice = this.price;
-  }
-   // Cập nhật commentCount khi có thay đổi trong comments
-   this.commentCount = this.comments.length;
-   
+  this.updateFinalPrice();
+  this.commentCount = this.comments.length;
   next();
 });
 
+// Middleware post-find
+productSchema.post('find', async function(docs) {
+  if (Array.isArray(docs)) {
+    const updates = docs.map(doc => {
+      if (doc && typeof doc.updateFinalPrice === 'function') {
+        doc.updateFinalPrice();
+        return doc.save();
+      }
+      return null;
+    });
+    await Promise.all(updates.filter(Boolean));
+  }
+});
 
+// Middleware post-findOne
+productSchema.post('findOne', async function(doc) {
+  if (doc && typeof doc.updateFinalPrice === 'function') {
+    doc.updateFinalPrice();
+    await doc.save();
+  }
+});
 const Product = mongoose.model("Product", productSchema);
 module.exports = { Product, productSchema };

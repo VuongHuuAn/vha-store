@@ -211,6 +211,24 @@ export class SellerService {
         `/seller/set-discount/${productId}`,
         discountData
       );
+      
+      // Log để debug
+      console.log('Set discount response:', {
+        productId,
+        discountData,
+        updatedProduct: response.data
+      });
+
+      return response.data;
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  // Thêm method để refresh product data
+  static async refreshProduct(productId) {
+    try {
+      const response = await api.get(`/api/products/${productId}`);
       return response.data;
     } catch (error) {
       this.handleError(error);
