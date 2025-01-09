@@ -226,18 +226,69 @@ const ProductDetail = () => {
               <div className="space-y-6">
                 {comments.map((comment) => (
                   <div key={comment._id} className="border rounded p-4 hover:shadow-md transition-shadow">
-                    <div className="flex justify-between mb-2">
-                      <span className="font-semibold">{comment.userName}</span>
+                    <div className="flex justify-between items-start mb-2">
+                      <div className="flex items-center space-x-2">
+                        {comment.userId === product?.sellerId?._id ? (
+                          <img 
+                            src={product.sellerId.shopAvatar} 
+                            alt={product.sellerId.shopName}
+                            className="w-8 h-8 rounded-full object-cover"
+                          />
+                        ) : (
+                          <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
+                            <span className="text-gray-500 text-sm">{comment.userName[0]}</span>
+                          </div>
+                        )}
+                        <div>
+                          <span className="font-semibold">
+                            {comment.userId === product?.sellerId?._id 
+                              ? product.sellerId.shopName 
+                              : comment.userName}
+                          </span>
+                          {comment.userId === product?.sellerId?._id && (
+                            <span className="ml-2 text-xs bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full">
+                              Seller
+                            </span>
+                          )}
+                          {comment.purchaseVerified && (
+                            <span className="ml-2 text-xs bg-green-100 text-green-600 px-2 py-0.5 rounded-full">
+                              Verified Purchase
+                            </span>
+                          )}
+                        </div>
+                      </div>
                       <span className="text-yellow-400">{'★'.repeat(comment.rating)}</span>
                     </div>
                     <p className="mb-4 text-gray-700">{comment.content}</p>
                     
                     {/* Replies */}
-                    <div className="ml-8 space-y-2">
+                    <div className="ml-8 space-y-3">
                       {comment.replies.map((reply, index) => (
-                        <div key={index} className="bg-gray-50 p-2 rounded">
-                          <div className="font-semibold text-sm text-gray-700">{reply.userName}</div>
-                          <p className="text-gray-600">{reply.content}</p>
+                        <div key={index} className="bg-gray-50 p-3 rounded">
+                          <div className="flex items-center space-x-2 mb-1">
+                            {reply.isSellerReply && product?.sellerId?.shopAvatar ? (
+                              <img 
+                                src={product.sellerId.shopAvatar} 
+                                alt={reply.userName}
+                                className="w-6 h-6 rounded-full object-cover"
+                              />
+                            ) : (
+                              <div className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center">
+                                <span className="text-gray-500 text-xs">{reply.userName[0]}</span>
+                              </div>
+                            )}
+                            <div className="flex items-center">
+                              <span className="font-semibold text-sm">
+                                {reply.isSellerReply ? product?.sellerId?.shopName : reply.userName}
+                              </span>
+                              {reply.isSellerReply && (
+                                <span className="ml-2 text-xs bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full">
+                                  Seller
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                          <p className="text-gray-600 ml-8">{reply.content}</p>
                         </div>
                       ))}
                     </div>
