@@ -95,9 +95,11 @@ productSchema.methods.updateFinalPrice = function() {
 // Middleware pre-save
 productSchema.pre('save', function(next) {
   this.updateFinalPrice();
-  this.commentCount = this.comments.length;
+  // Kiểm tra nếu comments tồn tại trước khi truy cập length
+  this.commentCount = this.comments ? this.comments.length : 0;
   next();
 });
+
 
 // Middleware post-find
 productSchema.post('find', async function(docs) {

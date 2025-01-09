@@ -34,8 +34,14 @@ const Order = () => {
     };
 
     const calculateTotal = (cartItems) => {
+        if (!Array.isArray(cartItems)) return;
         const total = cartItems.reduce((sum, item) => {
-            return sum + ((item.product.finalPrice || item.product.price) * item.quantity);
+            const price = item.product.price;
+            const discount = item.product.discount || 0;
+            const finalPrice = discount > 0 
+                ? price * (1 - discount/100) 
+                : price;
+            return sum + (finalPrice * item.quantity);
         }, 0);
         setTotalPrice(total);
     };
@@ -187,26 +193,49 @@ const Order = () => {
                         <div className="bg-white p-6 rounded-lg shadow-sm">
                             <h2 className="text-xl font-semibold mb-4">Order Items</h2>
                             <div className="space-y-4">
-                                {cart.map((item) => (
-                                    <div key={item.product._id} 
-                                         className="flex items-center border-b last:border-0 pb-4 last:pb-0">
-                                        <img
-                                            src={item.product.images[0]}
-                                            alt={item.product.name}
-                                            className="w-20 h-20 object-cover rounded"
-                                        />
-                                        <div className="ml-4 flex-1">
-                                            <h3 className="font-semibold">{item.product.name}</h3>
-                                            <p className="text-gray-600">Quantity: {item.quantity}</p>
-                                            <p className="text-gray-600">
-                                                Price: ${(item.product.finalPrice || item.product.price).toFixed(2)}
-                                            </p>
+                                {cart.map((item) => {
+                                    const price = item.product.price;
+                                    const discount = item.product.discount || 0;
+                                    const finalPrice = discount > 0 
+                                        ? price * (1 - discount/100) 
+                                        : price;
+                                    const itemTotal = finalPrice * item.quantity;
+
+                                    return (
+                                        <div key={item.product._id} 
+                                             className="flex items-center border-b last:border-0 pb-4 last:pb-0">
+                                            <img
+                                                src={item.product.images[0]}
+                                                alt={item.product.name}
+                                                className="w-20 h-20 object-cover rounded"
+                                            />
+                                            <div className="ml-4 flex-1">
+                                                <h3 className="font-semibold">{item.product.name}</h3>
+                                                <p className="text-gray-600">Quantity: {item.quantity}</p>
+                                                <div className="text-gray-600">
+                                                    {discount > 0 ? (
+                                                        <>
+                                                            <span className="line-through mr-2">
+                                                                ${price.toFixed(2)}
+                                                            </span>
+                                                            <span className="text-red-500">
+                                                                ${finalPrice.toFixed(2)}
+                                                            </span>
+                                                            <span className="ml-2 text-red-500">
+                                                                (-{discount}%)
+                                                            </span>
+                                                        </>
+                                                    ) : (
+                                                        <span>Price: ${price.toFixed(2)}</span>
+                                                    )}
+                                                </div>
+                                            </div>
+                                            <div className="font-bold">
+                                                ${itemTotal.toFixed(2)}
+                                            </div>
                                         </div>
-                                        <div className="font-bold">
-                                            ${((item.product.finalPrice || item.product.price) * item.quantity).toFixed(2)}
-                                        </div>
-                                    </div>
-                                ))}
+                                    );
+                                })}
                             </div>
                         </div>
 

@@ -178,7 +178,12 @@ const MyOrder = () => {
                                     </div>
                                     <div className="text-right">
                                         <p className="text-sm text-gray-500">Total Amount</p>
-                                        <p className="text-xl font-bold">${order.totalPrice.toFixed(2)}</p>
+                                        <p className="text-xl font-bold">
+                                            ${order.products.reduce((total, item) => {
+                                                const itemPrice = item.product.finalPrice || item.product.price;
+                                                return total + (itemPrice * item.quantity);
+                                            }, 0).toFixed(2)}
+                                        </p>
                                     </div>
                                 </div>
                             </div>

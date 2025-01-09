@@ -128,6 +128,13 @@ const ProductScreen = () => {
     return product.discount > 0 && now >= startDate && now <= endDate;
   };
 
+  const calculateFinalPrice = (product) => {
+    if (isDiscountActive(product)) {
+      return product.price * (1 - product.discount / 100);
+    }
+    return product.price;
+  };
+
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('vi-VN', {
       day: '2-digit',
@@ -176,11 +183,11 @@ const ProductScreen = () => {
                 <td>
                   <div className="flex flex-col">
                     <span className={isDiscountActive(product) ? "text-gray-500 line-through" : ""}>
-                      ${product.price}
+                      ${product.price.toFixed(2)}
                     </span>
                     {isDiscountActive(product) && (
                       <span className="text-red-600">
-                        ${(product.price * (1 - product.discount / 100)).toFixed(2)}
+                        ${calculateFinalPrice(product).toFixed(2)}
                       </span>
                     )}
                   </div>

@@ -183,31 +183,36 @@ const OrderScreen = () => {
 
                             {/* Order Items */}
                             <div className="border-t border-b py-4 mb-4">
-                                {order.products.map((item, index) => (
-                                    <div key={index} className="flex items-center py-4 border-b last:border-b-0">
-                                        <img
-                                            src={item.product.images[0]}
-                                            alt={item.product.name}
-                                            className="w-16 h-16 object-cover rounded"
-                                        />
-                                        <div className="ml-4 flex-1">
-                                            <h3 className="font-medium">{item.product.name}</h3>
-                                            <div className="flex items-center space-x-4 mt-2">
-                                                <p className="text-sm text-gray-500">
-                                                    Quantity: {item.quantity}
-                                                </p>
-                                                <p className="text-sm text-gray-500">
-                                                    Price: ${(item.product.finalPrice || item.product.price).toFixed(2)}
+                                {order.products.map((item, index) => {
+                                    const itemPrice = item.product.finalPrice || item.product.price;
+                                    const itemTotal = itemPrice * item.quantity;
+                                    
+                                    return (
+                                        <div key={index} className="flex items-center py-4 border-b last:border-b-0">
+                                            <img
+                                                src={item.product.images[0]}
+                                                alt={item.product.name}
+                                                className="w-16 h-16 object-cover rounded"
+                                            />
+                                            <div className="ml-4 flex-1">
+                                                <h3 className="font-medium">{item.product.name}</h3>
+                                                <div className="flex items-center space-x-4 mt-2">
+                                                    <p className="text-sm text-gray-500">
+                                                        Quantity: {item.quantity}
+                                                    </p>
+                                                    <p className="text-sm text-gray-500">
+                                                        Price: ${itemPrice.toFixed(2)}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div className="text-right">
+                                                <p className="font-medium">
+                                                    ${itemTotal.toFixed(2)}
                                                 </p>
                                             </div>
                                         </div>
-                                        <div className="text-right">
-                                            <p className="font-medium">
-                                                ${((item.product.finalPrice || item.product.price) * item.quantity).toFixed(2)}
-                                            </p>
-                                        </div>
-                                    </div>
-                                ))}
+                                    );
+                                })}
                             </div>
 
                             {/* Order Footer with Status Controls */}
@@ -219,7 +224,12 @@ const OrderScreen = () => {
                                     </div>
                                     <div className="text-right">
                                         <p className="text-sm text-gray-500">Total Amount</p>
-                                        <p className="text-xl font-bold">${order.totalPrice.toFixed(2)}</p>
+                                        <p className="text-xl font-bold">
+                                            ${order.products.reduce((total, item) => {
+                                                const itemPrice = item.product.finalPrice || item.product.price;
+                                                return total + (itemPrice * item.quantity);
+                                            }, 0).toFixed(2)}
+                                        </p>
                                     </div>
                                 </div>
                                 
