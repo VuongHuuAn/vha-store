@@ -17,9 +17,22 @@ const PORT = process.env.PORT;
 const app = express();
 const DB = process.env.MONGODB_URL;
 // middleware
+const allowedOrigins = [
+  "https://vha-store-huuan.vercel.app",
+  "http://localhost:3001",
+];
 app.use(
   cors({
-    origin:  "https://vha-store-huuan.vercel.app", 
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error("Not allowed by CORS"));
+    },
+    // origin:  "https://vha-store-huuan.vercel.app", 
     // origin:  "http://localhost:3001", 
     
     methods: ["GET", "POST", "PUT", "DELETE"],
