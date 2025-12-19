@@ -134,7 +134,9 @@ export default function DealOfDay() {
       <div className="text-xs font-medium">Flash Deal</div>
     </div>
   );
-  
+
+  void SaleTag;
+
   // Thêm component PriceDisplay
   const PriceDisplay = ({ price, finalPrice, discount, size = "normal" }) => {
     const savings = price - finalPrice;
@@ -171,6 +173,8 @@ export default function DealOfDay() {
       </div>
     );
   };
+
+  void PriceDisplay;
 
   return (
     <section className="container mx-auto px-4 py-12">

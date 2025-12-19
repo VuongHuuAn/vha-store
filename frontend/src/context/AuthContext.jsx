@@ -56,31 +56,19 @@ export const AuthProvider = ({ children }) => {
   }, [navigate, location]);
 
   const login = async (email, password) => {
-    try {
-      const data = await AuthService.login(email, password);
-      setUser(data.user);
-      return data;
-    } catch (error) {
-      throw error;
-    }
+    const data = await AuthService.login(email, password);
+    setUser(data.user);
+    return data;
   };
 
    // Thêm phương thức requestPasswordReset
    const requestPasswordReset = async (email) => {
-    try {
-      return await AuthService.requestPasswordReset(email);
-    } catch (error) {
-      throw error;
-    }
+    return await AuthService.requestPasswordReset(email);
   };
 
   // Thêm phương thức updatePassword
   const updatePassword = async (resetToken, newPassword) => {
-    try {
-      return await AuthService.updatePassword(resetToken, newPassword);
-    } catch (error) {
-      throw error;
-    }
+    return await AuthService.updatePassword(resetToken, newPassword);
   };
 
   const googleLogin = () => {

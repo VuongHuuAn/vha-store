@@ -35,7 +35,7 @@ const OrderScreen = () => {
                 hour: '2-digit',
                 minute: '2-digit'
             }).format(date);
-        } catch (error) {
+        } catch {
             return 'Date not available';
         }
     };

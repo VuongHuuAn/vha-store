@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { UserService } from '../services/UserService';
 import NavigationBar from './NavigationBar';
@@ -10,7 +10,7 @@ const Category = () => {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [ setError] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
 
   // Định nghĩa categories

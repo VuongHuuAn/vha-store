@@ -123,7 +123,7 @@ class AuthService {
     try {
       const userStr = localStorage.getItem("user");
       return userStr ? JSON.parse(userStr) : null;
-    } catch (error) {
+    } catch {
       // Nếu có lỗi khi parse JSON, xóa dữ liệu không hợp lệ
       localStorage.removeItem("user");
       return null;

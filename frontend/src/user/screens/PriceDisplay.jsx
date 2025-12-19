@@ -1,4 +1,3 @@
-import React from 'react';
 import { useProduct } from '../../context/ProductContext';
 
 const PriceDisplay = ({ 

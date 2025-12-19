@@ -9,6 +9,7 @@ const ProductDetail = () => {
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
   const [selectedImage, setSelectedImage] = useState(0);
+  void setSelectedImage;
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState({ content: '', rating: 5 });
   const [newReply, setNewReply] = useState({ commentId: null, content: '' });

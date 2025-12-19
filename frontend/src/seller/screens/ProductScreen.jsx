@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { SellerService, ProductCategories } from '../services/SellerService';
 import { Delete as DeleteIcon, Edit as EditIcon, LocalOffer as DiscountIcon } from '@mui/icons-material';
 

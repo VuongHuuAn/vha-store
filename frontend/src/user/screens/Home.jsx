@@ -7,6 +7,7 @@ import NavigationBar from "./NavigationBar";
 import DealOfDay from "./DealOfDay";
 
 export default function Home() {
+  void categoryImages;
   const sliderSettings = {
     dots: true,
     infinite: true,

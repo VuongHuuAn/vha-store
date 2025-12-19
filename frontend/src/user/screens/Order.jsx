@@ -328,6 +328,7 @@ const Order = () => {
                                     }}
                                     onLoadPaymentData={paymentRequest => {
                                       console.log('load payment data', paymentRequest);
+                                      handleGooglePaySuccess(paymentRequest);
                                     }}
                                   />
                                 ) : (
