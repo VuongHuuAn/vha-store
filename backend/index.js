@@ -13,7 +13,7 @@ const productRouter = require("./routes/product");
 const userRouter = require('./routes/user');
 const adminRouter = require("./routes/admin");
 // INIT
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5000;
 const app = express();
 const DB = process.env.MONGODB_URL;
 // middleware
