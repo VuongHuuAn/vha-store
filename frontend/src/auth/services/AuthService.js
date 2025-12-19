@@ -33,7 +33,8 @@ class AuthService {
       if (response.data && response.data.token) {
         localStorage.setItem("token", response.data.token);
         // Loại bỏ token và _id trước khi lưu user
-        const { token, _id, ...userData } = response.data;
+        const { token, _id: userId, ...userData } = response.data;
+        void userId;
         localStorage.setItem("user", JSON.stringify(userData));
         return { user: userData, token };
       } else {
@@ -54,7 +55,8 @@ class AuthService {
       
       if (data && data.token) {
         localStorage.setItem("token", data.token);
-        const { token, _id, ...userData } = data;
+        const { token, _id: userId, ...userData } = data;
+        void userId;
         localStorage.setItem("user", JSON.stringify(userData));
         
         return { user: userData, token };

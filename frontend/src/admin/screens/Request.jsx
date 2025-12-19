@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { AdminService } from '../services/AdminService';
 import { toast } from 'react-toastify';
 import { FaCheck, FaTimes, FaMapMarkerAlt, FaClock } from 'react-icons/fa';
@@ -16,7 +16,7 @@ const Request = () => {
       const requestsData = await AdminService.getSellerRequests();
       setRequests(requestsData);
     } catch (error) {
-      toast.error('Failed to fetch requests');
+      toast.error(error?.response?.data?.msg || 'Failed to fetch requests');
     } finally {
       setLoading(false);
     }
@@ -28,7 +28,7 @@ const Request = () => {
       toast.success(`Request ${status} successfully`);
       fetchData();
     } catch (error) {
-      toast.error(`Failed to ${status} request`);
+      toast.error(error?.response?.data?.msg || `Failed to ${status} request`);
     }
   };
 

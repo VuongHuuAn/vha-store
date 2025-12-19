@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { AdminService } from '../services/AdminService';
 import { toast } from 'react-toastify';
 import { FaUserSlash, FaStore } from 'react-icons/fa';
@@ -12,7 +12,7 @@ const SellerManagement = () => {
       const data = await AdminService.getSellers();
       setSellers(data);
     } catch (error) {
-      toast.error('Failed to fetch sellers');
+      toast.error(error?.response?.data?.msg || 'Failed to fetch sellers');
     } finally {
       setLoading(false);
     }
@@ -28,7 +28,7 @@ const SellerManagement = () => {
       toast.success('Seller account disabled successfully');
       fetchSellers(); // Refresh the list
     } catch (error) {
-      toast.error('Failed to disable seller');
+      toast.error(error?.response?.data?.msg || 'Failed to disable seller');
     }
   };
 

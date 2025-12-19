@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaUsers, FaUserCog, FaSignOutAlt } from 'react-icons/fa';
 import { useAuth } from '../../context/AuthContext';
@@ -27,7 +27,7 @@ const AdminScreen = () => {
         blockedSellers: data.blockedSellers || 0
       });
     } catch (error) {
-      toast.error('Failed to fetch statistics');
+      toast.error(error?.response?.data?.msg || 'Failed to fetch statistics');
     } finally {
       setLoading(false);
     }
